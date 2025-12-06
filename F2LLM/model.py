@@ -18,14 +18,14 @@ class F2LLM:
         self.model_type = detect_model_type(model_path)
 
         flash_attn_version = getattr(flash_attn, '__version__', '0.0.0')
-        no_support_deterministic = version.parse(flash_attn_version) < version.parse("2.4.1")
+        no_support_deterministic = version.parse(flash_attn_version) < version.parse("2.6.0")
         
         if self.model_type == 'encoder_only' and no_support_deterministic:
             attn_implementation = 'eager'
         else:
             attn_implementation = 'flash_attention_2'
         
-        print(f"{self.model_type}")
+        print(f"Model Type: {self.model_type} | Attention Implementation: {attn_implementation}")
         self.lm = AutoModel.from_pretrained(
             model_path,
             trust_remote_code=True,
